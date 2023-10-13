@@ -53,7 +53,7 @@ public class Main {
 			int[] cctv = cctvs.get(i);
 			int[][] type = getCCTV(cctv[2]);
 			int[][] copy = new int[N][M];
-			copyMap(copy, map);
+			copyMap(copy, temp);
 			
 			// 각 cctv가 확인할 수 있는 방향 리스트 
 			for(int n = 0; n < type.length; n++) {
