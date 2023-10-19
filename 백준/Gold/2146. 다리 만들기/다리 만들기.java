@@ -6,7 +6,7 @@ public class Main {
 	static int[][] map;
 	static int[] dx = {-1, 0, 1, 0};
 	static int[] dy = {0, 1, 0, -1};
-	static Queue<int[]> island;
+	static Queue<int[]> island, edge;
 	static boolean[][] visited;
 	
 	public static void main(String[] args) throws IOException {
@@ -17,6 +17,7 @@ public class Main {
 		min = Integer.MAX_VALUE;
 		island = new LinkedList<>();
 		visited = new boolean[N][N];
+		edge = new LinkedList<>();
 			
 		// map 입력 
 		for(int i = 0; i < N; i++) {
@@ -27,7 +28,7 @@ public class Main {
 		}
 		
 		// 1. 섬인 칸은 전체 섬을 다른 숫자로 표시하기
-		// 2. 표시하면서 그 섬칸을 큐에 넣기 
+		// 2. 표시하면서 그 섬의 가장자리를 큐에 넣기 
 		// 3. 큐에서 하나씩 빼면서 bfs 돌리기 해당 칸 방문표시 
 		// 3. for문을 돌다가 방문하지 않았고 1인 칸을 만나면 반복 
 		
@@ -48,8 +49,8 @@ public class Main {
 					paintMap(i, j, number);
 					//printMap();
 					
-					while(!island.isEmpty()) {
-						int[] current = island.poll();
+					while(!edge.isEmpty()) {
+						int[] current = edge.poll();
 						bfs(current[0], current[1], number);
 						visited[current[0]][current[1]] = true;
 					}
@@ -76,6 +77,7 @@ public class Main {
 		Queue<int[]> q = new LinkedList<>();
 		q.add(new int[] {x, y});
 		visit[x][y] = true;
+		visited[x][y] = true;
 		island.add(new int[] {x, y});
 		map[x][y] = number;
 		
@@ -95,10 +97,12 @@ public class Main {
 				}
 				
 				if(map[nx][ny] == 0) {
+					edge.add(new int[] {nx, ny});
 					continue;
 				}
 				
 				visit[nx][ny] = true;
+				visited[nx][ny] = true;
 				map[nx][ny] = number;
 				q.add(new int[] {nx, ny});
 				island.add(new int[] {nx, ny});
@@ -112,7 +116,7 @@ public class Main {
 		Queue<int[]> q = new LinkedList<>();
 		q.add(new int[] {x, y});
 		visit[x][y] = true;
-		int count = 0;
+		int count = 1;
 		//System.out.println("시작점 "+x+" "+y);
 		
 		while(!q.isEmpty()) {
