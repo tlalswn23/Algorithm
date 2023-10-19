@@ -6,8 +6,8 @@ public class Main {
 	static int[][] map;
 	static int[] dx = {-1, 0, 1, 0};
 	static int[] dy = {0, 1, 0, -1};
-	static Queue<int[]> island, edge;
-	static boolean[][] visited;
+	static Queue<int[]> island, edge, q;
+	static boolean[][] visited, visit;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -112,8 +112,8 @@ public class Main {
 	
 	// 1을 만날 때까지 반복 
 	static void bfs(int x, int y, int number) {
-		boolean[][] visit = new boolean[N][N];
-		Queue<int[]> q = new LinkedList<>();
+		visit = new boolean[N][N];
+		q = new LinkedList<>();
 		q.add(new int[] {x, y});
 		visit[x][y] = true;
 		int count = 1;
