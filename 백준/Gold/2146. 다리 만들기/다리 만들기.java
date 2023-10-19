@@ -51,6 +51,7 @@ public class Main {
 					
 					while(!edge.isEmpty()) {
 						int[] current = edge.poll();
+						//System.out.println(current[0]+" "+current[1]);
 						bfs(current[0], current[1], number);
 						visited[current[0]][current[1]] = true;
 					}
@@ -96,8 +97,13 @@ public class Main {
 					continue;
 				}
 				
+				if(map[nx][ny] == -1) {
+					continue;
+				}
+				
 				if(map[nx][ny] == 0) {
 					edge.add(new int[] {nx, ny});
+					map[nx][ny] = -1;
 					continue;
 				}
 				
@@ -137,7 +143,7 @@ public class Main {
 						continue;
 					}
 					
-					if(map[nx][ny] != 0 && map[nx][ny] != number) {
+					if(map[nx][ny] > 0 && map[nx][ny] != number) {
 						//System.out.println(nx+" "+ny+" "+count);
 						min = Math.min(min, count);
 						return;
