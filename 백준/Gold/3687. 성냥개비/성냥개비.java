@@ -53,8 +53,8 @@ public class Main {
 		arr[8] = matches[8] = 10;
 		
 		for(int i = 9; i < 101; i++) {
-			arr[i] = arr[i-2]*10 + matches[2];
-			for(int j = 3; j < 8; j++) {
+			arr[i] = Long.MAX_VALUE;
+			for(int j = 2; j < 8; j++) {
 				arr[i] = Math.min(arr[i], arr[i-j]*10+matches[j]);
 			}
 		}
