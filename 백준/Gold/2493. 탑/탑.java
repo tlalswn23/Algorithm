@@ -21,28 +21,23 @@ public class Main {
 			tower[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		if(N == 1) {
-			System.out.println(0);
-			return;
-		}
-		
-		stack.add(N);
+		stack.push(N);
 		for(int i = N-1; i > 0; i--) {
 			
 			while(!stack.isEmpty() && tower[i] >= tower[stack.peek()]) {
 				result[stack.pop()] = i;
 			}
 			
-			stack.add(i);
+			stack.push(i);
 		}
 		
-		while(!stack.isEmpty()) {
-			result[stack.pop()] = 0;
-		}
 		
+		StringBuilder sb = new StringBuilder();
 		for(int i = 1; i <= N; i++) {
-			System.out.print(result[i]+" ");
+			sb.append(result[i]+" ");
 		}
+		
+		System.out.println(sb);
 	}
 
 }
