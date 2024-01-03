@@ -17,6 +17,7 @@ public class Main {
 			parent[i] = i;
 		}
 		
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		for(int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine());
 			int calc = Integer.parseInt(st.nextToken()); // 연산 
@@ -28,13 +29,16 @@ public class Main {
 			}
 			
 			if(calc == 1) { // 같은 집합인지 확인 
-				String answer = "NO";
+				String answer = "NO\n";
 				if(find(n1) == find(n2)) {
-					answer = "YES";
+					answer = "YES\n";
 				}
-				System.out.println(answer);
+				bw.write(answer);
 			}
 		}
+		
+		bw.flush();
+		bw.close();
 	}
 	
 	static void union(int n1, int n2) {
