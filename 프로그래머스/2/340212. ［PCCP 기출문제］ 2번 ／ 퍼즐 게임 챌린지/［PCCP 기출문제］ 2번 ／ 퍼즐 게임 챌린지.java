@@ -18,11 +18,11 @@ class Solution {
             return answer;
         }
         
-        while(min < max){
+        while(min <= max){
             int mid = (max + min) / 2;
             
             if(canSolve(mid, diffs, times, limit)){ // 해결할 수 있으면 
-                max = mid;
+                max = mid-1;
                 answer = Math.min(answer, mid);
             }
             else{
