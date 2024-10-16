@@ -1,52 +1,63 @@
 import java.util.*;
 
 class Solution {
-    static List<Integer>[] network;
-    static boolean[] visited;
+    static int[] parent;
     
     public int solution(int n, int[][] computers) {
-        int answer = 0;
-        network = new ArrayList[n];
-        visited = new boolean[n];
+        parent = new int[n];
+        Set<Integer> root = new HashSet<>();
         
         for(int i = 0; i < n; i++){
-            network[i] = new ArrayList<>();
+            parent[i] = i;
         }
         
         for(int i = 0; i < n; i++){
             for(int j = i+1; j < n; j++){
                 if(computers[i][j] == 1){
-                    network[i].add(j);
-                    network[j].add(i);
+                    union(i, j);
                 }
             }
         }
         
         for(int i = 0; i < n; i++){
-            if(visited[i]){
-                continue;
-            }
-            
-            visited[i] = true;
-            findNet(i);
-            answer++;
+            parent[i] = find(i);
         }
         
-        return answer;
+        for(int i = 0; i < n; i++){
+            root.add(parent[i]);
+        }
+        
+        return root.size();
     }
     
-    static void findNet(int num){
+    // 같은 그래프로 합치는 함수 
+    static boolean union(int x, int y){
+        int xp = find(x);
+        int yp = find(y);
         
-        // 방문안했으면
-        for(int i = 0; i < network[num].size(); i++){
-            int n = network[num].get(i);
-            
-            if(visited[n]){
-                continue;
-            }
-            
-            visited[n] = true;
-            findNet(n);
+        // 이미 같은 그래프
+        if(xp == yp){
+            return false;
         }
+        
+        if(xp < yp){
+            parent[yp] = xp;
+        }else{
+            parent[xp] = yp; 
+        }
+        return true;
+
+    }
+    
+    // 부모노드 찾는 함수 
+    static int find(int n){
+        if(parent[n] == n){
+            return n;
+        }
+        
+        return find(parent[n]);
+
     }
 }
+
+// union find 후 root 노드의 개수 세아리기
