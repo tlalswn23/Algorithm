@@ -1,75 +1,51 @@
 import java.util.*;
 
 class Solution {
-    class Song implements Comparable{
-        int num, play;
-        
-        public Song(int num, int play){
-            this.num = num;
-            this.play = play;
-        }
-        
-        @Override
-        public int compareTo(Object o){
-            Song other = (Song)o;
-            return other.play - this.play;
-        }
-    }
+    static Map<String, Integer> genreMap;
+    static Map<String, List<int[]>> songMap;
     
-    static Map<String, Integer> genreCnt;
-    static Map<String, List<Song>> list;
     public int[] solution(String[] genres, int[] plays) {
-        genreCnt = new HashMap<>();
-        list = new HashMap<>();
+        int[] answer = new int[genres.length];
+        int count = 0;
+        genreMap = new HashMap<>();
+        songMap = new HashMap<>();
         
-        // 장르마다 총 재생 수 저장 + 리스트에 각 곡 고유번호, 재생 수 저장 
-        for(int i = 0; i < plays.length; i++){
+        
+        // 전체 장르의 개수 카운트 + 장르에 따른 노래와 횟수 카운트
+        for(int i = 0; i < genres.length; i++){
             int cnt = 0;
-            List<Song> temp = new ArrayList<>();
-            if(genreCnt.containsKey(genres[i])){
-                cnt = genreCnt.get(genres[i]);
-                temp = list.get(genres[i]);
+            List<int[]> songList = new ArrayList<>();
+            
+            if(genreMap.containsKey(genres[i])){
+                cnt = genreMap.get(genres[i]);
+                songList = songMap.get(genres[i]);
             }
             
-            genreCnt.put(genres[i], cnt+plays[i]);
-            temp.add(new Song(i, plays[i]));
-            list.put(genres[i], temp);
+            cnt += plays[i];
+            genreMap.put(genres[i], cnt);
+            songList.add(new int[] {i, plays[i]});
+            songMap.put(genres[i], songList);
         }
         
-        for(String s : list.keySet()){
-            List<Song> temp = list.get(s);
-            if(temp.size() > 1){
-                Collections.sort(temp);
-                list.put(s, temp);
-            }
-        }
+        // 가장 많이 나온 장르 
+        List<String> sortGenres = new ArrayList<>(genreMap.keySet()); // keyset 먼저 가져오기
+        sortGenres.sort((o1, o2) -> genreMap.get(o2).compareTo(genreMap.get(o1)));
         
-        
-        List<Map.Entry<String, Integer>> sortList = new LinkedList<>(genreCnt.entrySet());
-        sortList.sort((o1, o2) -> o2.getValue() - o1.getValue()); // 내림차순 정렬
-        
-        
-        int[] answer = new int[genres.length*2];
-        int i = 0;
-        
-        // 많이 재생된 장르 순서대로 2곡씩 저장 
-        for(Map.Entry<String, Integer> s : sortList){
-            // 해당 장르에 대해 
-            String genre = s.getKey();
-            List<Song> temp = list.get(genre);
-            int size = temp.size();
+        for(int i = 0; i < sortGenres.size(); i++){
+            List<int[]> list = songMap.get(sortGenres.get(i));
+            Collections.sort(list, (o1, o2) -> o2[1] == o1[1] ? o1[0] - o2[0] : o2[1] - o1[1]);
+            // System.out.println(list.get(0)[0]+" "+list.get(0)[1]);
             
-            // list 길이가 2이상이면 2까지 돌고 2이하이면 길이까지.
-            if(temp.size() > 2){
-                size = 2;
-            }
             
-            for(int j = 0; j < size; j++){
-                answer[i] = temp.get(j).num;
-                i++;
+            int idx = 0;
+            while(idx < list.size() && idx < 2){
+                answer[count] = list.get(idx)[0];
+                idx++;
+                count++;
             }
         }
         
-        return Arrays.copyOfRange(answer, 0, i);
+        
+        return Arrays.copyOfRange(answer, 0, count);
     }
 }
