@@ -1,35 +1,31 @@
 import java.util.*;
 
 class Solution {
-    static Queue<Integer> queue;
-    
     public int[] solution(int[] progresses, int[] speeds) {
-        int[] answer = new int[100];
-        queue = new LinkedList<>();
+        int[] answer = new int[speeds.length];
         
-        for(int i = 0; i < progresses.length; i++){
-            queue.add((int)Math.ceil((double)(100-progresses[i])/speeds[i])); // 올림해서 날짜 측정
-        }
-        
-        int max = queue.poll();
-        int func = 1; // 기능 개수
-        int cnt = 0; // answer 크기
-        while(!queue.isEmpty()){
-            int day = queue.poll();
-            
-            if(max < day){
-                answer[cnt] = func;
-                max = day;
-                cnt++;
-                func = 1;
-                continue;
+        int index = 1;
+        int max = (int)Math.ceil((double)(100-progresses[0])/speeds[0]);
+        int idx = 0;
+        int count = 1;
+      
+        while(index < progresses.length){
+            int days = (int)Math.ceil((double)(100-progresses[index])/speeds[index]);
+
+            if(days > max){ // 선 작업 마칠때까지 완성되지 못하면
+                answer[idx] = count; // 이전 작업 저장
+                max = days; // max 갱신 
+                idx++;
+                index++;
+                count = 1;
+            }else{ // 기간 안에 완성할 수 있으면 
+                count++;
+                index++;
             }
-            
-            func++;
         }
         
-        answer[cnt] = func;
+        answer[idx] = count;
         
-        return Arrays.copyOfRange(answer, 0, cnt+1);
+        return Arrays.copyOfRange(answer, 0, idx+1);
     }
 }
