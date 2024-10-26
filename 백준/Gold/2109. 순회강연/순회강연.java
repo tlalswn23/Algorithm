@@ -8,7 +8,7 @@ public class Main {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 		
 		int N = Integer.parseInt(br.readLine());
-		PriorityQueue<int[]> queue = new PriorityQueue<>((o1, o2) -> o2[0] == o1[0] ? o1[1] - o2[1] : o2[0] - o1[0]);
+		PriorityQueue<int[]> queue = new PriorityQueue<>((o1, o2) -> o2[0] == o1[0] ? o2[1] - o1[1] : o2[0] - o1[0]);
 		boolean[] visited = new boolean[10001]; // 해당 날짜에 강연하는지 확인 
 		
 		for(int i = 0 ; i < N; i++) {
