@@ -3,18 +3,21 @@ import java.util.*;
 class Solution {
     public int solution(int[] citations) {
         int answer = 0;
-        int[] reverse = new int[citations.length];
         
-        Arrays.sort(citations); // 정렬 
-        for(int i = 0; i < citations.length; i++){
-            reverse[i] = citations[citations.length-1-i];
-        }
+        Arrays.sort(citations);
         
-        for(int i = 0; i < citations.length; i++){
-            if((i+1) <= reverse[i]){
-                answer = i+1;
+        int quotation = 0; // 인용수
+        int count = 0; // 논문 수
+        
+        for(int i = citations.length-1; i >= 0; i--){
+            quotation = citations[i];
+            count++;
+            
+            if(quotation >= count){
+                answer = count;
             }
         }
+        
         
         return answer;
     }
