@@ -1,70 +1,46 @@
 import java.util.*;
 
 class Solution {
-    static boolean[] visited;
-    static int N, P, C;
-    static List<Integer>[] parent, child;
+    static int[][] win;
     
     public int solution(int n, int[][] results) {
         int answer = 0;
-        parent = new ArrayList[n+1];
-        child = new ArrayList[n+1];
-        N = n;
-        
-        for(int i = 0; i <= n; i++){
-            parent[i] = new ArrayList<>();
-            child[i] = new ArrayList<>();
-        }
+        win = new int[n+1][n+1];
         
         for(int i = 0; i < results.length; i++){
-            int win = results[i][0];
-            int lose = results[i][1];
+            int[] match = results[i];
             
-            parent[lose].add(win);
-            child[win].add(lose);
+            win[match[0]][match[1]] = 1; // 이겼으면 1
+            win[match[1]][match[0]] = -1; // 졌으면 -1
+        }
+ 
+        for(int k = 1; k < n+1; k++){ // 1부터 n까지의 선수 모두 탐색
+            for(int i = 1; i < n+1; i++){
+                for(int j = 1; j < n+1; j++){
+                    
+                    // i -> a이고 a -> b이면 i -> b임을 이용
+                    if(win[i][k] == 1 && win[k][j] == 1){
+                        win[i][j] = 1;
+                        win[j][i] = -1;
+                    }
+                }
+            }
         }
         
-        // 모든 노드에 대해 부모+자식 노드 개수 확인
-        for(int i = 1; i <= n; i++){
-            P = 0; C = 0;
+        for(int i = 1; i < n+1; i++){ // 모든 선수에 대해 모든 선수와의 관계 확인하기 
+            int result = 0;
             
-            visited = new boolean[n+1];
-            countParent(i);
+            for(int j = 1; j < n+1; j++){
+                if(win[i][j] != 0){ // 확인된 관계가 있으면 카운트+1
+                    result++;
+                }
+            }
             
-            visited = new boolean[n+1];
-            countChild(i);
-            
-            if((P+C) == n-1){
+            if(result == n-1){
                 answer++;
             }
         }
         
         return answer;
-    }
-    
-    static void countParent(int v){
-        
-        for(int i = 0; i < parent[v].size(); i++){
-            if(visited[parent[v].get(i)]){
-                continue;
-            }
-            
-            visited[parent[v].get(i)] = true;
-            P++;
-            countParent(parent[v].get(i));
-        }
-    }
-    
-    static void countChild(int v){
-        
-        for(int i = 0; i < child[v].size(); i++){
-            if(visited[child[v].get(i)]){
-                continue;
-            }
-            
-            visited[child[v].get(i)] = true;
-            C++;
-            countChild(child[v].get(i));
-        }
     }
 }
